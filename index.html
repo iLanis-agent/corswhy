@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CorsWhy - why the browser blocked your cross-origin request</title>
+<meta name="description" content="Paste a request and the server headers. See whether the browser allows it, which CORS check fails first, and the header that fixes it.">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#1a1608; color:#faf5e6; line-height:1.6; }
+  .wrap { max-width:680px; margin:0 auto; padding:48px 20px 60px; }
+  .logo { font-size:46px; font-weight:800; } .logo span { color:#fcd34d; }
+  .tag { font-size:19px; margin-top:10px; color:#ece3c8; }
+  .cta { display:inline-block; margin-top:26px; background:#fcd34d; color:#1a1608; font-weight:700; padding:14px 30px; border-radius:12px; text-decoration:none; }
+  h2 { font-size:21px; margin:40px 0 10px; } li { color:#cdc19c; margin-bottom:8px; } ul { margin-left:20px; }
+  .demo { margin-top:26px; background:#2a2310; border-radius:14px; padding:18px; } .demo b { color:#fcd34d; }
+  footer { margin-top:50px; font-size:13px; color:#a39870; } a { color:#fcd34d; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">Cors<span>Why</span></div>
+  <div class="tag">Access-Control-Allow-Headers: * does not cover Authorization.</div>
+  <a class="cta" href="app.html">Open the app</a>
+  <div class="demo">A request with an <b>Authorization</b> header and a server that answers <b>Access-Control-Allow-Headers: *</b> is still <b>blocked</b>. So is <b>Access-Control-Allow-Origin: *</b> when the request sends cookies.</div>
+  <h2>What it does</h2>
+  <ul><li>Says whether a preflight is needed, and exactly why</li><li>Walks the preflight and the real response check by check</li><li>Handles credentials, wildcards, Authorization and method case</li><li>Shows the header line that fixes the first failure</li></ul>
+  <footer>Follows the Fetch Standard safelists and MDN. Static, client-side, nothing stored or sent. <a href="https://github.com/iLanis-agent/corswhy">Source</a></footer>
+</div>
+</body>
+</html>
