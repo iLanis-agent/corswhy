@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CorsWhy - why the browser blocked your cross-origin request</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#1a1608; color:#faf5e6; line-height:1.5; }
+  .wrap { max-width:700px; margin:0 auto; padding:26px 16px 50px; }
+  h1 { font-size:28px; } h1 span { color:#fcd34d; }
+  .sub { color:#cfc4a5; margin:6px 0 16px; }
+  .card { background:#2a2310; border-radius:14px; padding:14px; margin-bottom:12px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; }
+  label { font-size:12px; color:#cfc4a5; display:block; margin-bottom:3px; }
+  input,select { width:100%; background:#1a1608; color:#faf5e6; border:1px solid #6b5f3e; border-radius:8px; padding:8px; font-size:15px; font-family:inherit; }
+  button { background:#a16207; color:#faf5e6; border:0; padding:8px 14px; border-radius:8px; cursor:pointer; font-size:14px; margin-right:6px; margin-top:10px; }
+  table { width:100%; border-collapse:collapse; } td,th { text-align:left; padding:8px 4px; border-bottom:1px solid #4a4126; } th { font-size:12px; color:#cfc4a5; font-weight:600; }
+  td.v { font-size:22px; font-weight:800; color:#fcd34d; } tr.me td.v { color:#faf5e6; }
+  .stats { display:flex; gap:22px; flex-wrap:wrap; margin-top:12px; } .stats b { display:block; font-size:20px; } .muted { color:#cfc4a5; font-size:13px; }
+  .err { color:#ff9c8a; } .note { font-size:12.5px; color:#a39870; margin-top:6px; }
+
+  td.v { font-size:17px; } td, th { font-size:14px; } .bar { height:10px; background:#1a1608; border-radius:6px; overflow:hidden; margin-top:6px; } .bar i { display:block; height:100%; background:#fcd34d; } .bar i.over { background:#ff7b72; } .no { color:#ff9c8a; }
+  .cb { display:inline-flex; align-items:center; gap:4px; margin-right:12px; font-size:14px; color:#faf5e6; } .cb input { width:auto; } .big { font-family:monospace; font-size:26px; font-weight:800; color:#fcd34d; } td.v.m { font-family:monospace; }
+  textarea { width:100%; background:#1a1608; color:#faf5e6; border:1px solid #6b5f3e; border-radius:8px; padding:8px; font-size:14px; font-family:monospace; min-height:110px; } .ok { color:#86efac; font-weight:700; } .no { color:#ff9c8a; } td.m { font-family:monospace; } .chip { display:inline-block; font-family:monospace; background:#1a1608; border-radius:6px; padding:2px 6px; margin:2px 4px 2px 0; }
+  textarea { width:100%; background:#1a1608; color:#faf5e6; border:1px solid #6b5f3e; border-radius:8px; padding:8px; font-size:13px; font-family:monospace; min-height:130px; } .badge { display:inline-block; font-weight:800; padding:4px 12px; border-radius:20px; background:#1a1608; } .bar { height:14px; background:#1a1608; border-radius:8px; position:relative; margin:12px 0 6px; overflow:hidden; } .bar i.f { position:absolute; left:0; top:0; bottom:0; background:#d9a31a; } .bar i.n { position:absolute; top:0; bottom:0; width:3px; background:#fff; }
+  .seg { display:inline-block; height:22px; background:#d9a31a; border-radius:4px; margin:2px 2px 2px 0; vertical-align:middle; } .seg.last { background:#a16207; } .chip { display:inline-block; font-family:monospace; background:#1a1608; border-radius:6px; padding:2px 8px; margin:2px 4px 2px 0; font-size:16px; }
+.st{display:flex;gap:10px;padding:8px 0;border-top:1px solid #4a4126;font-size:13px}.st .ic{font-weight:800;width:18px}.st.g .ic{color:#4ade80}.st.b .ic{color:#f87171}.st small{display:block;color:#a39870;margin-top:2px}.fx{font-family:ui-monospace,Menlo,monospace;color:#fcd34d}.vd{font-size:18px;font-weight:800;margin:0 0 6px}.vd.g{color:#4ade80}.vd.b{color:#f87171}textarea{font-family:ui-monospace,Menlo,monospace;font-size:13px;min-height:90px}.chk{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:14px}.chk input{width:auto}</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Cors<span>Why</span></h1>
+  <div class="sub">Describe the request your page makes and the headers the server sent back. CorsWhy says whether a browser would allow it, which check fails first, and the header that fixes it.</div>
+  <div class="card">
+    <div class="grid"><div><label>Page origin</label><input id="o" value="https://app.example.com"></div><div><label>Method</label><input id="m" value="POST"></div></div>
+    <label style="margin-top:10px">Request headers you set (Name: value, one per line)</label>
+    <textarea id="rq" spellcheck="false"></textarea>
+    <div class="chk"><input type="checkbox" id="cr"><label for="cr" style="margin:0">Request includes credentials (cookies, fetch credentials: "include")</label></div>
+    <label style="margin-top:10px">Preflight (OPTIONS) response: first line is the status code, then headers</label>
+    <textarea id="pf" spellcheck="false"></textarea>
+    <label style="margin-top:10px">Actual response headers</label>
+    <textarea id="rs" spellcheck="false"></textarea>
+    <div style="margin-top:10px"><button id="p1">JSON POST, all correct</button><button id="p2">Wildcard with cookies</button><button id="p3">Authorization with *</button><button id="p4">Forgot OPTIONS</button><button id="p5">Simple GET, no CORS</button></div>
+    <div id="err" class="err" style="margin-top:6px"></div>
+  </div>
+  <div class="card"><div id="out"></div></div>
+  <div class="note">Rules follow the Fetch Standard's CORS-safelisted method and header definitions (fetched and read) and the MDN pages on CORS and the Access-Control-Allow-* headers. A preflight is sent when the method is not GET, HEAD or POST, or any header is not CORS-safelisted (Content-Type other than form-urlencoded, multipart/form-data or text/plain, any custom header, Authorization, and so on). Not modelled: redirects, Access-Control-Max-Age caching and browser caps, Access-Control-Expose-Headers, Private Network Access, and the forbidden headers the browser sets itself. The preflight status rule (any 2xx) is the Fetch Standard's rule as I know it; that part of the spec was cut off in the fetch and not read directly. Your own tooling (curl -i with an Origin header) shows the real headers. Runs in your browser, nothing is sent anywhere.</div>
+</div>
+<script src="engine.js"></script>
+<script>
+(function () {
+  var C = window.CorsWhy, $ = function (i) { return document.getElementById(i); };
+  var O = 'https://app.example.com';
+  var P = {
+    p1: { m: 'POST', rq: 'Content-Type: application/json', cr: false, pf: '204\nAccess-Control-Allow-Origin: ' + O + '\nAccess-Control-Allow-Methods: POST, OPTIONS\nAccess-Control-Allow-Headers: Content-Type\nVary: Origin', rs: 'Access-Control-Allow-Origin: ' + O + '\nVary: Origin' },
+    p2: { m: 'GET', rq: '', cr: true, pf: '', rs: 'Access-Control-Allow-Origin: *\nAccess-Control-Allow-Credentials: true' },
+    p3: { m: 'GET', rq: 'Authorization: Bearer abc123', cr: false, pf: '200\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Headers: *', rs: 'Access-Control-Allow-Origin: *' },
+    p4: { m: 'PUT', rq: 'Content-Type: application/json', cr: false, pf: '404', rs: 'Access-Control-Allow-Origin: ' + O },
+    p5: { m: 'GET', rq: 'Accept: application/json', cr: false, pf: '', rs: 'Content-Type: application/json' }
+  };
+  Object.keys(P).forEach(function (k) { $(k).onclick = function () { var p = P[k]; $('o').value = O; $('m').value = p.m; $('rq').value = p.rq.replace(/\\n/g, '\n'); $('cr').checked = p.cr; $('pf').value = p.pf.replace(/\\n/g, '\n'); $('rs').value = p.rs.replace(/\\n/g, '\n'); run(); }; });
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function run() {
+    var err = $('err'), origin = $('o').value.trim(), method = $('m').value.trim();
+    err.textContent = ''; function fail(m) { err.textContent = m; $('out').innerHTML = ''; }
+    if (!/^[a-z][a-z0-9+.-]*:\/\/[^\/\s?#]+$/i.test(origin) && origin !== 'null') return fail('Page origin looks like https://example.com (scheme and host, no path, no trailing slash).');
+    if (!/^[A-Za-z]+$/.test(method)) return fail('Method must be letters only, for example GET or PUT.');
+    var m = /^(GET|HEAD|POST|OPTIONS|DELETE|PUT|PATCH)$/i.test(method) ? method.toUpperCase() : method;
+    var rq = C.parseHeaderLines($('rq').value); if (rq.bad.length) return fail('Request headers line ' + rq.bad.join(', ') + ' is not "Name: value".');
+    var pfText = $('pf').value.trim(), pre = null;
+    if (pfText) {
+      var lines = pfText.split(/\r?\n/), st = parseInt(lines[0], 10);
+      if (!/^\d{3}\b/.test(lines[0].trim())) return fail('Preflight: the first line must be the status code, for example 204.');
+      var ph = C.parseHeaderLines(lines.slice(1).join('\n')); if (ph.bad.length) return fail('Preflight header line ' + (ph.bad[0] + 1) + ' is not "Name: value".');
+      pre = { status: st, headers: ph.headers };
+    }
+    var rs = C.parseHeaderLines($('rs').value); if (rs.bad.length) return fail('Response header line ' + rs.bad.join(', ') + ' is not "Name: value".');
+    var r = C.analyze({ origin: origin, method: m, headers: rq.headers, credentials: $('cr').checked }, pre, { headers: rs.headers });
+    var h = '<div class="vd ' + (r.allowed ? 'g' : 'b') + '">' + (r.allowed ? 'Allowed: the browser lets the page read the response' : 'Blocked at: ' + esc(r.blockedAt)) + '</div>';
+    h += '<div class="muted" style="margin-bottom:8px">' + (r.preflight.needed ? 'Preflight needed because: ' + esc(r.preflight.reasons.join('; ')) : 'No preflight: GET, HEAD or POST with only CORS-safelisted headers.') + '</div>';
+    r.steps.forEach(function (s) { h += '<div class="st ' + (s.ok ? 'g' : 'b') + '"><span class="ic">' + (s.ok ? '\u2713' : '\u2717') + '</span><div>' + esc(s.title) + '<small>' + esc(s.detail) + '</small>' + (s.fix ? '<small>Fix: <span class="fx">' + esc(s.fix) + '</span></small>' : '') + '</div></div>'; });
+    r.warnings.forEach(function (w) { h += '<div class="note">' + (w === 'ACAO null' ? 'Access-Control-Allow-Origin: null is risky: sandboxed pages and data: URLs also have the origin null (MDN).' : 'The server names a specific origin but does not send Vary: Origin, so a shared cache may serve one origin\'s answer to another (MDN).') + '</div>'; });
+    $('out').innerHTML = h;
+  }
+  ['o', 'm', 'rq', 'pf', 'rs', 'cr'].forEach(function (i) { $(i).oninput = run; $(i).onchange = run; });
+  $('p1').onclick();
+})();
+</script>
+</body>
+</html>
